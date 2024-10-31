@@ -1,0 +1,45 @@
+import sqlite3
+
+# Ruta del archivo de base de datos
+db_path = 'alquiler_madrid_nuevo.db'
+
+# Conectar a la base de datos (crea el archivo si no existe)
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+# Crear la tabla `inmuebles` con la estructura proporcionada
+create_table_query = """
+CREATE TABLE IF NOT EXISTS inmuebles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    descripcion TEXT,
+    localizacion TEXT,
+    precio REAL,
+    ultima_actualizacion DATE,
+    consumo_energetico TEXT,
+    emisiones_co2 TEXT,
+    tipo_operacion TEXT,
+    superficie_construida REAL,
+    superficie_util TEXT,
+    habitaciones TEXT,
+    baños TEXT,
+    antigüedad TEXT,
+    conservacion TEXT,
+    planta TEXT,
+    tipo_casa TEXT
+);
+"""
+
+# Ejecutar la query para crear la tabla
+try:
+    cursor.execute(create_table_query)
+    print("Tabla `inmuebles` creada con éxito en la base de datos.")
+except sqlite3.Error as e:
+    print(f"Error al crear la tabla: {e}")
+
+# Confirmar que la tabla fue creada correctamente
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+print("Tablas en la base de datos:", cursor.fetchall())
+
+# Cerrar la conexión
+conn.commit()
+conn.close()
